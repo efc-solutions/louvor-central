@@ -5,72 +5,91 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Presença Manhã - Ministério de Louvor</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Inter', system-ui, sans-serif; background: linear-gradient(135deg, #1a0a2e 0%, #2d1b4e 50%, #1a0a2e 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1rem; }
-  .logo-circle { width: 64px; height: 64px; border-radius: 50%; background: radial-gradient(circle at 40% 40%, #7c3aed, #2d1b4e); display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem; font-size: 28px; font-weight: 700; color: #ede9fe; box-shadow: 0 4px 20px rgba(124,58,237,0.5); }
-  .card { background: rgba(255,255,255,0.05); backdrop-filter: blur(20px); border: 1px solid rgba(124,58,237,0.3); border-radius: 20px; width: 100%; max-width: 400px; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
-  .header { padding: 1.75rem 1.75rem 1.25rem; text-align: center; border-bottom: 1px solid rgba(124,58,237,0.2); }
-  .header h1 { font-size: 20px; font-weight: 700; color: #ede9fe; margin-bottom: 2px; }
-  .header p { font-size: 13px; color: #a78bfa; }
-  .turno-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(124,58,237,0.25); border: 1px solid rgba(124,58,237,0.5); border-radius: 20px; padding: 5px 14px; font-size: 12px; color: #c4b5fd; margin-top: 8px; font-weight: 600; }
-  .date-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.05); border: 1px solid rgba(124,58,237,0.2); border-radius: 20px; padding: 4px 12px; font-size: 12px; color: #a78bfa; margin-top: 6px; }
-  .body { padding: 1.5rem 1.75rem; }
-  .field { margin-bottom: 1.25rem; position: relative; }
-  label { display: block; font-size: 11px; font-weight: 600; color: #a78bfa; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 7px; }
-  .input-wrap { position: relative; }
-  input[type="text"] { width: 100%; padding: 12px 14px 12px 40px; background: rgba(255,255,255,0.06); border: 1.5px solid rgba(124,58,237,0.3); border-radius: 10px; font-size: 15px; color: #ede9fe; font-family: inherit; transition: border-color 0.2s; outline: none; }
-  input[type="text"]::placeholder { color: #6d5a8a; }
-  input[type="text"]:focus { border-color: #7c3aed; background: rgba(124,58,237,0.1); }
-  .input-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #7c3aed; font-size: 17px; }
-  .autocomplete-list { position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: #1e0f35; border: 1.5px solid rgba(124,58,237,0.4); border-radius: 10px; max-height: 200px; overflow-y: auto; z-index: 100; box-shadow: 0 8px 24px rgba(0,0,0,0.5); display: none; }
-  .autocomplete-list.show { display: block; }
-  .autocomplete-item { padding: 10px 14px; font-size: 14px; color: #ede9fe; cursor: pointer; transition: background 0.1s; border-bottom: 1px solid rgba(124,58,237,0.1); }
-  .autocomplete-item:last-child { border-bottom: none; }
-  .autocomplete-item:hover, .autocomplete-item.active { background: rgba(124,58,237,0.25); color: #fff; }
-  .autocomplete-item mark { background: transparent; color: #a78bfa; font-weight: 600; }
-  .closed-msg { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 14px; text-align: center; color: #fca5a5; font-size: 14px; margin-bottom: 1rem; }
-  .closed-msg strong { display: block; font-size: 16px; margin-bottom: 4px; color: #f87171; }
-  .submit-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #7c3aed, #5b21b6); color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(124,58,237,0.4); }
-  .submit-btn:hover { background: linear-gradient(135deg, #6d28d9, #4c1d95); transform: translateY(-1px); }
-  .submit-btn:disabled { background: rgba(124,58,237,0.2); box-shadow: none; cursor: not-allowed; transform: none; color: #6d5a8a; }
-  .status-msg { margin-top: 1rem; padding: 12px 14px; border-radius: 10px; font-size: 14px; text-align: center; display: none; }
-  .status-msg.ok { background: rgba(16,185,129,0.15); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.3); display: block; }
-  .status-msg.erro { background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.3); display: block; }
-  .footer { padding: 0 1.75rem 1.5rem; text-align: center; }
-  .footer a { font-size: 12px; color: #7c3aed; text-decoration: none; opacity: 0.7; transition: opacity 0.2s; }
-  .footer a:hover { opacity: 1; }
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-thumb { background: #7c3aed; border-radius: 2px; }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', system-ui, sans-serif; background: linear-gradient(135deg, #1a0a2e 0%, #2d1b4e 50%, #1a0a2e 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+.logo-circle { width: 64px; height: 64px; border-radius: 50%; background: radial-gradient(circle at 40% 40%, #7c3aed, #2d1b4e); display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem; font-size: 28px; font-weight: 700; color: #ede9fe; box-shadow: 0 4px 20px rgba(124,58,237,0.5); }
+.card { background: rgba(255,255,255,0.05); backdrop-filter: blur(20px); border: 1px solid rgba(124,58,237,0.3); border-radius: 20px; width: 100%; max-width: 400px; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+.header { padding: 1.75rem 1.75rem 1.25rem; text-align: center; border-bottom: 1px solid rgba(124,58,237,0.2); }
+.header h1 { font-size: 20px; font-weight: 700; color: #ede9fe; margin-bottom: 2px; }
+.header p { font-size: 13px; color: #a78bfa; }
+.turno-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(124,58,237,0.25); border: 1px solid rgba(124,58,237,0.5); border-radius: 20px; padding: 5px 14px; font-size: 12px; color: #c4b5fd; margin-top: 8px; font-weight: 600; }
+.date-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.05); border: 1px solid rgba(124,58,237,0.2); border-radius: 20px; padding: 4px 12px; font-size: 12px; color: #a78bfa; margin-top: 6px; }
+.body { padding: 1.5rem 1.75rem; }
+.field { margin-bottom: 1.25rem; position: relative; }
+label { display: block; font-size: 11px; font-weight: 600; color: #a78bfa; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 7px; }
+.input-wrap { position: relative; }
+input[type="text"] { width: 100%; padding: 12px 14px 12px 40px; background: rgba(255,255,255,0.06); border: 1.5px solid rgba(124,58,237,0.3); border-radius: 10px; font-size: 15px; color: #ede9fe; font-family: inherit; transition: border-color 0.2s; outline: none; }
+input[type="text"]::placeholder { color: #6d5a8a; }
+input[type="text"]:focus { border-color: #7c3aed; background: rgba(124,58,237,0.1); }
+.input-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #7c3aed; font-size: 17px; }
+.autocomplete-list { position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: #1e0f35; border: 1.5px solid rgba(124,58,237,0.4); border-radius: 10px; max-height: 200px; overflow-y: auto; z-index: 100; box-shadow: 0 8px 24px rgba(0,0,0,0.5); display: none; }
+.autocomplete-list.show { display: block; }
+.autocomplete-item { padding: 10px 14px; font-size: 14px; color: #ede9fe; cursor: pointer; transition: background 0.1s; border-bottom: 1px solid rgba(124,58,237,0.1); }
+.autocomplete-item:last-child { border-bottom: none; }
+.autocomplete-item:hover, .autocomplete-item.active { background: rgba(124,58,237,0.25); color: #fff; }
+.autocomplete-item mark { background: transparent; color: #a78bfa; font-weight: 600; }
+.closed-msg { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 10px; padding: 14px; text-align: center; color: #fca5a5; font-size: 14px; margin-bottom: 1rem; }
+.closed-msg strong { display: block; font-size: 16px; margin-bottom: 4px; color: #f87171; }
+.submit-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #7c3aed, #5b21b6); color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(124,58,237,0.4); }
+.submit-btn:hover { background: linear-gradient(135deg, #6d28d9, #4c1d95); transform: translateY(-1px); }
+.submit-btn:disabled { background: rgba(124,58,237,0.2); box-shadow: none; cursor: not-allowed; transform: none; color: #6d5a8a; }
+.status-msg { margin-top: 1rem; padding: 12px 14px; border-radius: 10px; font-size: 14px; text-align: center; display: none; }
+.status-msg.ok { background: rgba(16,185,129,0.15); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.3); display: block; }
+.status-msg.erro { background: rgba(239,68,68,0.15); color: #fca5a5; border: 1px solid rgba(239,68,68,0.3); display: block; }
+.footer { padding: 0 1.75rem 1.5rem; text-align: center; }
+.footer a { font-size: 12px; color: #7c3aed; text-decoration: none; opacity: 0.7; transition: opacity 0.2s; }
+.footer a:hover { opacity: 1; }
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-thumb { background: #7c3aed; border-radius: 2px; }
+.aviso-suave { display:none; margin-top:8px; font-size:12px; color:#c4b5fd; background:rgba(124,58,237,0.12); border:1px solid rgba(124,58,237,0.25); border-radius:8px; padding:8px 10px; }
+.match-card { display:none; margin-top:1rem; background:rgba(251,191,36,0.08); border:1px solid rgba(251,191,36,0.35); border-radius:12px; padding:14px 16px; }
+.match-card p { font-size:14px; color:#fde68a; line-height:1.4; margin-bottom:10px; }
+.match-card strong { color:#fef3c7; }
+.match-actions { display:flex; gap:8px; }
+.match-actions button { flex:1; padding:10px; border-radius:8px; border:none; font-size:13px; font-weight:600; cursor:pointer; font-family:inherit; transition: opacity 0.2s; }
+.match-actions button:hover { opacity:0.85; }
+.btn-sim { background:#7c3aed; color:#fff; }
+.btn-nao { background:rgba(255,255,255,0.08); color:#ede9fe; border:1px solid rgba(255,255,255,0.15) !important; }
 </style>
 </head>
 <body>
 <div class="card">
-  <div class="header">
-    <div class="logo-circle">c</div>
-    <h1>Ministério de Louvor</h1>
-    <p>Central SP</p>
-    <div class="turno-badge">🎵 Turno Manhã</div>
-    <div class="date-badge" id="dateBadge">📅 carregando...</div>
-  </div>
-  <div class="body">
-    <div id="closedMsg" class="closed-msg" style="display:none;">
-      <strong>⏱ Fora do horário</strong>
-      Este link funciona aos sábados das 9h às 13h.
-    </div>
-    <div class="field">
-      <label>👤 Seu nome completo</label>
-      <div class="input-wrap">
-        <span class="input-icon">✦</span>
-        <input type="text" id="nomeInput" placeholder="Digite seu nome..." autocomplete="off" oninput="filtrarNomes()" onkeydown="navegarLista(event)" />
-        <div class="autocomplete-list" id="autoList"></div>
-      </div>
-    </div>
-    <button class="submit-btn" id="btnEnviar" onclick="registrarPresenca()">
-      ✓ Confirmar presença
-    </button>
-    <div class="status-msg" id="statusMsg"></div>
-  </div>
+<div class="header">
+<div class="logo-circle">c</div>
+<h1>Ministério de Louvor</h1>
+<p>Central SP</p>
+<div class="turno-badge">🎵 Turno Manhã</div>
+<div class="date-badge" id="dateBadge">📅 carregando...</div>
+</div>
+<div class="body">
+<div id="closedMsg" class="closed-msg" style="display:none;">
+<strong>⏱ Fora do horário</strong>
+Este link funciona aos sábados das 9h às 13h.
+</div>
+<div class="field">
+<label>👤 Seu nome completo</label>
+<div class="input-wrap">
+<span class="input-icon">✦</span>
+<input type="text" id="nomeInput" placeholder="Digite seu nome..." autocomplete="off" oninput="filtrarNomes()" onkeydown="navegarLista(event)" />
+<div class="autocomplete-list" id="autoList"></div>
+</div>
+<div class="aviso-suave" id="avisoSuave"></div>
+</div>
+
+<div class="match-card" id="matchCard">
+<p>Encontramos um nome parecido na lista: <strong id="matchNomeTexto"></strong>. É você?</p>
+<div class="match-actions">
+<button class="btn-sim" onclick="confirmarSouEu()">✓ Sim, sou eu</button>
+<button class="btn-nao" onclick="confirmarOutraPessoa()">✗ Não, sou outra pessoa</button>
+</div>
+</div>
+
+<button class="submit-btn" id="btnEnviar" onclick="registrarPresenca()">
+✓ Confirmar presença
+</button>
+<div class="status-msg" id="statusMsg"></div>
+</div>
 </div>
 <script>
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzH2CXOdpC9UfkwJW8eqvha5LZEobfOHJwNyNiOy7GxJovtx9DGuvnois4Sb1l95u7k/exec";
@@ -80,6 +99,8 @@ const HORA_FIM = 13;
 let participantes = [];
 let itemAtivo = -1;
 let nomeSelecionado = "";
+let matchNomeParecido = "";
+let matchNomeDigitado = "";
 
 function verificarHorario() {
   const agora = new Date();
@@ -110,6 +131,8 @@ async function carregarParticipantes() {
 function filtrarNomes() {
   const val = document.getElementById("nomeInput").value.trim().toLowerCase();
   nomeSelecionado = "";
+  esconderAvisoSuave();
+  esconderMatchCard();
   const lista = document.getElementById("autoList");
   itemAtivo = -1;
   if (val.length < 2) { lista.classList.remove("show"); return; }
@@ -127,6 +150,8 @@ function selecionarNome(nome) {
   document.getElementById("nomeInput").value = nome;
   nomeSelecionado = nome;
   document.getElementById("autoList").classList.remove("show");
+  esconderAvisoSuave();
+  esconderMatchCard();
 }
 
 function navegarLista(e) {
@@ -144,11 +169,95 @@ document.addEventListener("click", e => {
   if (!e.target.closest(".input-wrap")) document.getElementById("autoList").classList.remove("show");
 });
 
+// ---- Similaridade de nomes (distância de Levenshtein normalizada) ----
+function normalizarTexto(s) {
+  return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+}
+
+function similaridade(a, b) {
+  a = normalizarTexto(a);
+  b = normalizarTexto(b);
+  const m = a.length, n = b.length;
+  if (!m || !n) return 0;
+  const dp = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));
+  for (let i = 0; i <= m; i++) dp[i][0] = i;
+  for (let j = 0; j <= n; j++) dp[0][j] = j;
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      dp[i][j] = a[i-1] === b[j-1] ? dp[i-1][j-1] : 1 + Math.min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]);
+    }
+  }
+  const dist = dp[m][n];
+  return 1 - dist / Math.max(m, n);
+}
+
+function encontrarParecido(nome) {
+  if (!nome) return null;
+  let melhor = null, melhorScore = 0;
+  participantes.forEach(p => {
+    if (normalizarTexto(p) === normalizarTexto(nome)) return; // já é igual, não é "parecido"
+    const s = similaridade(nome, p);
+    if (s > melhorScore) { melhorScore = s; melhor = p; }
+  });
+  if (melhor && melhorScore >= 0.75) return { nome: melhor, score: melhorScore };
+  return null;
+}
+
+function mostrarAvisoSuave(nomeParecido) {
+  const el = document.getElementById("avisoSuave");
+  el.textContent = "💡 Nome parecido já cadastrado: " + nomeParecido;
+  el.style.display = "block";
+}
+
+function esconderAvisoSuave() {
+  document.getElementById("avisoSuave").style.display = "none";
+}
+
+function mostrarMatchCard(nomeDigitado, nomeParecido) {
+  matchNomeDigitado = nomeDigitado;
+  matchNomeParecido = nomeParecido;
+  document.getElementById("matchNomeTexto").textContent = nomeParecido;
+  document.getElementById("matchCard").style.display = "block";
+}
+
+function esconderMatchCard() {
+  document.getElementById("matchCard").style.display = "none";
+}
+
+function confirmarSouEu() {
+  esconderMatchCard();
+  document.getElementById("nomeInput").value = matchNomeParecido;
+  nomeSelecionado = matchNomeParecido;
+  enviarPresenca(matchNomeParecido);
+}
+
+function confirmarOutraPessoa() {
+  esconderMatchCard();
+  enviarPresenca(matchNomeDigitado);
+}
+
+// ---- Envio ----
 async function registrarPresenca() {
   const nome = nomeSelecionado || document.getElementById("nomeInput").value.trim();
-  const btn = document.getElementById("btnEnviar");
   if (!nome) { mostrarStatus("erro", "Digite seu nome para continuar."); return; }
 
+  if (!nomeSelecionado) {
+    const parecido = encontrarParecido(nome);
+    if (parecido) {
+      if (parecido.score >= 0.90) {
+        mostrarMatchCard(nome, parecido.nome);
+        return;
+      } else {
+        mostrarAvisoSuave(parecido.nome);
+      }
+    }
+  }
+
+  await enviarPresenca(nome);
+}
+
+async function enviarPresenca(nome) {
+  const btn = document.getElementById("btnEnviar");
   btn.disabled = true;
   btn.textContent = "⏳ Enviando...";
   const agora = new Date();
@@ -164,6 +273,7 @@ async function registrarPresenca() {
     mostrarStatus("ok", "✓ Presença de " + nome + " confirmada! Que Deus abençoe o louvor hoje. 🎵");
     document.getElementById("nomeInput").value = "";
     nomeSelecionado = "";
+    esconderAvisoSuave();
     setTimeout(() => { btn.disabled = false; btn.innerHTML = "✓ Confirmar presença"; }, 10000);
   } catch(e) {
     mostrarStatus("erro", "Erro ao registrar. Verifique sua conexão.");
